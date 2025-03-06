@@ -121,6 +121,8 @@ class MainMenuState extends MusicBeatState
 			giveAchievement();
 			ClientPrefs.saveSettings();
 		}
+		
+		addVirtualPad(UP_DOWN, A_B);
 
 		super.create();
 	}

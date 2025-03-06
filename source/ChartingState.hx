@@ -222,7 +222,26 @@ class ChartingState extends MusicBeatState
 			{name: "Note", label: 'Note'},
 			{name: "Events", label: 'Events'}
 		];
+		
+		UI_box = new FlxUITabMenu(null, tabs, true);
 
+		UI_box.resize(300, 400);
+		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
+		UI_box.y = 25;
+		
+		#if mobile
+		var tipText:FlxText = new FlxText(UI_box.x, UI_box.y + UI_box.height + 30, 0,
+			"UP/Down - Change Conductor's strum time
+			\nC + Left/Right - Go to the previous/next section
+			\nHold C to move 4x faster
+			\nHold X to move 10x faster
+			\nHold Control and click on an arrow to select it
+			\n
+			\nA - Test your chart
+			\nUP/Down(Right Side) - Decrease/Increase Note Sustain Length
+			\nY - Stop/Resume song
+			\nZ - Reset section", 16);
+		#else
 		var tipText:FlxText = new FlxText(UI_box.x, UI_box.y + UI_box.height + 30, 0,
 			"W/S or Mouse Wheel - Change Conductor's strum time
 			\nA or Left/D or Right - Go to the previous/next section
@@ -233,16 +252,12 @@ class ChartingState extends MusicBeatState
 			\nQ/E - Decrease/Increase Note Sustain Length
 			\nSpace - Stop/Resume song
 			\nR - Reset section", 16);
+		#end
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
 		//tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
 
-		UI_box = new FlxUITabMenu(null, tabs, true);
-
-		UI_box.resize(300, 400);
-		UI_box.x = FlxG.width / 2 + GRID_SIZE / 2;
-		UI_box.y = 25;
 		add(UI_box);
 
 		addSongUI();
@@ -261,6 +276,7 @@ class ChartingState extends MusicBeatState
 			changeSection();
 		}
 		lastSong = currentSongName;
+		addVirtualPad(ChartingStateC, ChartingStateC);
 		super.create();
 	}
 
@@ -900,7 +916,7 @@ class ChartingState extends MusicBeatState
 
 		if (!blockInput)
 		{
-			if (FlxG.keys.justPressed.ENTER)
+			if (FlxG.keys.justPressed.ENTER || _virtualpad.buttonA.justPressed)
 			{
 				FlxG.mouse.visible = false;
 				PlayState.SONG = _song;
@@ -920,11 +936,11 @@ class ChartingState extends MusicBeatState
 			}
 
 			if(curSelectedNote != null && curSelectedNote[1] > -1) {
-				if (FlxG.keys.justPressed.E)
+				if (FlxG.keys.justPressed.E || _virtualpad.buttonE.justPressed)
 				{
 					changeNoteSustain(Conductor.stepCrochet);
 				}
-				if (FlxG.keys.justPressed.Q)
+				if (FlxG.keys.justPressed.Q || _virtualpad.buttonP.justPressed)
 				{
 					changeNoteSustain(-Conductor.stepCrochet);
 				}
@@ -946,7 +962,7 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.justPressed.SPACE)
+			if (FlxG.keys.justPressed.SPACE || _virtualpad.buttonY.justPressed)
 			{
 				if (FlxG.sound.music.playing)
 				{
@@ -965,7 +981,7 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.justPressed.R)
+			if (FlxG.keys.justPressed.R || _virtualpad.buttonZ.justPressed)
 			{
 				if (FlxG.keys.pressed.SHIFT)
 					resetSection(true);
@@ -983,14 +999,15 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.pressed.W || FlxG.keys.pressed.S)
+			if ((FlxG.keys.pressed.W || FlxG.keys.pressed.S) || (_virtualpad.buttonUp.pressed || _virtualpad.buttonDown.pressed))
 			{
 				FlxG.sound.music.pause();
 
-				var holdingShift:Float = FlxG.keys.pressed.SHIFT ? 3 : 1;
+				var holdingShift:Float = 1;
+				if (FlxG.keys.pressed.SHIFT || _virtualpad.buttonY.pressed) holdingShift = 3;
 				var daTime:Float = 700 * FlxG.elapsed * holdingShift;
 
-				if (FlxG.keys.pressed.W)
+				if (FlxG.keys.pressed.W || _virtualpad.buttonUp.pressed)
 				{
 					FlxG.sound.music.time -= daTime;
 				}
@@ -1004,12 +1021,14 @@ class ChartingState extends MusicBeatState
 			}
 
 			var shiftThing:Int = 1;
-			if (FlxG.keys.pressed.SHIFT)
+			if (FlxG.keys.pressed.SHIFT || _virtualpad.buttonC.justPressed)
 				shiftThing = 4;
+			if (_virtualpad.buttonX.justPressed)
+				shiftThing = 10;
 
-			if (FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.D)
+			if ((FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.D) || (_virtualpad.buttonRight.justPressed && !_virtualpad.buttonC.pressed))
 				changeSection(curSection + shiftThing);
-			if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A) {
+			if ( (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A) || (_virtualpad.buttonLeft.justPressed && !_virtualpad.buttonC.pressed)) {
 				if(curSection <= 0) {
 					changeSection(_song.notes.length-1);
 				} else {

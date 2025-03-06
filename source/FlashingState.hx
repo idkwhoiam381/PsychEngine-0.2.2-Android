@@ -31,6 +31,8 @@ class FlashingState extends MusicBeatState
 		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 		FlxG.sound.music.fadeIn(4, 0, 0.7);
 		FlxTransitionableState.skipNextTransOut = false;
+		
+		addVirtualPad(NONE, A_B);
 	}
 
 	override function update(elapsed:Float)

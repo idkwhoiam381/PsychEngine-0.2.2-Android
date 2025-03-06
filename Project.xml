@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin'" file="PsychEngine" packageName="com.ninjamuffin99.funkin" package="com.ninjamuffin99.funkin" main="Main" version="0.2.7" company="ninjamuffin99" />
+	<app title="FNF' Psych Engine 0.2.2" file="PsychEngine" packageName="com.shadowmario.psychengine022" package="com.shadowmario.psychengine022" main="Main" version="0.2.7" company="ShadowMario" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -27,18 +27,27 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
-	<set name="BUILD_DIR" value="export/debug" if="debug" />
-	<set name="BUILD_DIR" value="export/release" unless="debug" />
-	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
+	<set name="BUILD_DIR" value="export/debug" if="debug" unless="termux" />
+	<set name="BUILD_DIR" value="export/release" unless="debug || termux" />
+	<set name="BUILD_DIR" value="export/32bit" if="32bits" unless="termux" />
+	
+	<!-- For Termux -->
+	<section if="termux">
+	    <set name="BUILD_DIR" value="/root/PsychEngine022/export/debug" if="debug" />
+	    <set name="BUILD_DIR" value="/root/PsychEngine022/export/release" unless="debug" />
+	    <set name="BUILD_DIR" value="/root/PsychEngine022/export/32bit" if="32bits" />
+	</section>
 
 	<classpath name="source" />
+	
+	<architecture name="ARM64" exclude="ARMV7" if="32bits_disabled" /> <!-- Only Arm64 Build Because I dont have a 32 bit device and I need to test fastly -->
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3"  unless="web"/>
@@ -118,6 +127,12 @@
 	<assets path="assets/week6_high"    library="week6_high"    exclude="*.ogg" if="web"/>
 	<assets path="assets/week6_high"    library="week6_high"    exclude="*.mp3" unless="web"/>
 	
+	<!-- Mobile Assets -->
+	<assets path="mobile/preload"        rename="assets"                exclude="*.ogg"        if="web"/>
+	<assets path="mobile/preload"        rename="assets"                exclude="*.mp3"       unless="web"/>
+	<assets path="mobile/shared"         rename="assets/shared"         library="shared"        exclude="*.ogg" if="web"/>
+	<assets path="mobile/shared"         rename="assets/shared"         library="shared"        exclude="*.mp3" unless="web"/>
+	
 	<assets path='example_mods' rename='mods' embed='false'/>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<!-- <template path='mods' /> -->
@@ -142,8 +157,8 @@
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
 	<haxelib name="faxe" if='switch'/>
-	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
+	<haxelib name="extension-androidtools" if="android"/>
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 
 	<!-- <haxelib name="markdown" /> -->
@@ -183,6 +198,22 @@
 
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	
+	<!--Used for Izzy Engine's crash handler-->
+	<haxedef name="HXCPP_CHECK_POINTER" />
+	<haxedef name="HXCPP_STACK_LINE" />
+	<haxedef name="HXCPP_STACK_TRACE" />
+	
+	<haxedef name="message.reporting" value="pretty" />
+	<haxedef name='no-deprecation-warnings' />
+	
+	<!-- Do whatever you want I'm tired uninstall and install everytime -->
+	<certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" />
+	<android target-sdk-version="34" if="termux"/>
+	
+	<!--Macro fixes-->
+	<haxeflag name="--macro" value="allowPackage('flash')" />
+	<haxeflag name="--macro" value="include('my.pack')" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 

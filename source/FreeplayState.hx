@@ -162,20 +162,33 @@ class FreeplayState extends MusicBeatState
 		textBG.alpha = 0.6;
 		add(textBG);
 		#if PRELOAD_ALL
-		var leText:String = "Press SPACE to listen to this Song / Press RESET to Reset your Score and Accuracy.";
+		var leText:String = "Press " + #if mobile 'X' #else "SPACE" #end + " to listen to this Song / Press " + #if mobile "Y" #else "RESET" #end + " to Reset your Score and Accuracy.";
 		#else
-		var leText:String = "Press RESET to Reset your Score and Accuracy.";
+		var leText:String = "Press " #if mobile "C" #else "RESET" #end + " to Reset your Score and Accuracy.";
 		#end
 		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, 18);
 		text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
 		text.scrollFactor.set();
 		add(text);
+		
+		#if PRELOAD_ALL
+		addVirtualPad(FULL, A_B_X_Y);
+		#else
+		addVirtualPad(FULL, A_B_C);
+		#end
 		super.create();
 	}
 
 	override function closeSubState() {
 		changeSelection();
+		persistentUpdate = true;
 		super.closeSubState();
+		removeVirtualPad();
+		#if PRELOAD_ALL
+		addVirtualPad(FULL, A_B_X_Y);
+		#else
+		addVirtualPad(FULL, A_B_C);
+		#end
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
@@ -221,7 +234,7 @@ class FreeplayState extends MusicBeatState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
-		var space = FlxG.keys.justPressed.SPACE;
+		var space = FlxG.keys.justPressed.SPACE || _virtualpad.buttonX.justPressed;
 
 		if (upP)
 		{
@@ -290,8 +303,10 @@ class FreeplayState extends MusicBeatState
 					
 			destroyFreeplayVocals();
 		}
-		else if(controls.RESET)
+		else if(controls.RESET || _virtualpad.buttonY.justPressed)
 		{
+		    persistentUpdate = false;
+		    removeVirtualPad();
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
