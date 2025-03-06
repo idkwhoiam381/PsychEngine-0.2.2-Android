@@ -1,4 +1,4 @@
-name: Build Psych Extended
+name: Build Psych Engine
 on: workflow_dispatch
 jobs:
   Android:
