@@ -9,7 +9,7 @@
     {
       "name": "extension-androidtools",
       "type": "git",
-      "ref": "main",
+      "ref": "9475bc38af35be2fc9754b49142ede4cb93838d4",
       "url": "https://github.com/MAJigsaw77/extension-androidtools"
     },
     {
@@ -41,7 +41,7 @@
     {
       "name": "lime",
       "type": "git",
-      "ref": "main",
+      "ref": "fa2225b9a347910b025c4202809fbf0b45c9d8c6",
       "url": "https://github.com/mcagabe19-stuff/lime"
     },
     {
