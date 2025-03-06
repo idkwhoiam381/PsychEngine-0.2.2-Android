@@ -9,6 +9,7 @@ import js.html.*;
 
 // Mobile Things
 import mobile.flixel.*;
+import mobile.states.*;
 import mobile.objects.*;
 import mobile.backend.*;
 import mobile.substates.*;
