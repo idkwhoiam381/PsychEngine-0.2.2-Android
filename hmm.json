@@ -7,10 +7,21 @@
       "url": "https://github.com/Aidan63/linc_discord-rpc"
     },
     {
+      "name": "linc_luajit",
+      "type": "git",
+      "ref": "master",
+      "url": "https://github.com/Sirox228/linc_luajit"
+    },
+    {
       "name": "extension-androidtools",
       "type": "git",
       "ref": "9475bc38af35be2fc9754b49142ede4cb93838d4",
       "url": "https://github.com/MAJigsaw77/extension-androidtools"
+    },
+    {
+      "name": "tjson",
+      "type": "haxelib",
+      "version": null
     },
     {
       "name": "flixel",
@@ -33,9 +44,15 @@
       "version": "2.4.0"
     },
     {
+      "name": "hxCodec",
+      "type": "git",
+      "ref": "main",
+      "url": "https://github.com/Prohack101010/hxCodec-Extended-Better"
+    },
+    {
       "name": "hxcpp",
       "type": "git",
-      "ref": "70bac0817b413de93d306f2243bba2ae4f89a813",
+      "ref": "master",
       "url": "https://github.com/mcagabe19-stuff/hxcpp"
     },
     {
