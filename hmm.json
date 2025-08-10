@@ -57,9 +57,8 @@
     },
     {
       "name": "lime",
-      "type": "git",
-      "ref": "main",
-      "url": "https://github.com/th2l-devs/lime"
+      "type": "haxelib",
+      "ref": "9.2.2"
     },
     {
       "name": "openfl",
