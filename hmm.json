@@ -10,7 +10,7 @@
       "name": "linc_luajit",
       "type": "git",
       "ref": "master",
-      "url": "https://github.com/Sirox228/linc_luajit"
+      "url": "https://github.com/th2l-devs/linc_luajit"
     },
     {
       "name": "extension-androidtools",
@@ -58,8 +58,8 @@
     {
       "name": "lime",
       "type": "git",
-      "ref": "fa2225b9a347910b025c4202809fbf0b45c9d8c6",
-      "url": "https://github.com/mcagabe19-stuff/lime"
+      "ref": "main",
+      "url": "https://github.com/th2l-devs/lime"
     },
     {
       "name": "openfl",
