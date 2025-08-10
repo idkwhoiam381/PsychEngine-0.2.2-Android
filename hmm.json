@@ -52,8 +52,8 @@
     {
       "name": "hxcpp",
       "type": "git",
-      "ref": "master",
-      "url": "https://github.com/mcagabe19-stuff/hxcpp"
+      "ref": "main",
+      "url": "https://github.com/th2l-devs/hxcpp"
     },
     {
       "name": "lime",
